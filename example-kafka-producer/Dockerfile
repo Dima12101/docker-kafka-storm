@@ -1,7 +1,5 @@
 FROM maven:3.2.5-jdk-8u40
 
-MAINTAINER wipatrick
-
 RUN mkdir --parents /usr/src/kafka-producer
 WORKDIR /usr/src/kafka-producer
 

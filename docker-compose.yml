@@ -1,39 +1,54 @@
-zookeeper:
-  build: ./zookeeper/framework
-  restart: always
-  ports:
-    - "2181:2181"
-  # volumes:
-  #   - ./backup/zookeeper:/tmp/zookeeper
-kafka:
-  build: ./kafka/framework
-  restart: always
-  ports:
-    - "9092:9092"
-  links:
-    - zookeeper:zookeeper
-nimbus:
-  build: ./storm/framework/storm-nimbus
-  restart: always
-  ports:
-    - "3772:3772"
-    - "3773:3773"
-    - "6627:6627"
-  links:
-    - zookeeper:zk
-supervisor:
-  build: ./storm/framework/storm-supervisor
-  restart: always
-  ports:
-    - "8000"
-  links:
-    - nimbus:nimbus
-    - zookeeper:zk
-stormui:
-  build: ./storm/framework/storm-ui
-  restart: always
-  ports:
-    - "8080:8080"
-  links:
-    - nimbus:nimbus
-    - zookeeper:zk
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    networks:
+      - local
+  kafka:
+    image: wurstmeister/kafka
+    restart: always
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.99.100
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+      - "9092:9092"
+    links:
+      - zookeeper:zookeeper
+    networks:
+      - local
+  nimbus:
+    image: storm
+    command: storm nimbus
+    restart: always
+    ports:
+      - "6627:6627"
+    links:
+      - zookeeper:zookeeper
+    networks:
+      - local
+  supervisor:
+    image: wurstmeister/storm-supervisor
+    restart: always
+    ports:
+      - "8000"
+    links:
+      - nimbus:nimbus
+      - zookeeper:zookeeper
+    networks:
+      - local
+  stormui:
+    image: wurstmeister/storm-ui
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - nimbus:nimbus
+      - zookeeper:zookeeper
+    networks:
+      - local
+networks:
+  local: 
+    name: local
