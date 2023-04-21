@@ -82,9 +82,9 @@ Then, the ```WordCountTopology``` is submitted to the "cluster" by calling ```su
 ➜  docker-kafka-storm git:(master) ./submit-storm-topology.sh com.biggis.storm.WordCountTopology wordcount-topology wordcount
 319  [main] INFO  com.biggis.storm.WordCountTopology - Submitting topology wordcount-topology to remote cluster.
 ...
-1258 [main] INFO  backtype.storm.StormSubmitter - Successfully uploaded topology jar to assigned location: ...
+1258 [main] INFO  org.apache.storm.StormSubmitter - Successfully uploaded topology jar to assigned location: ...
 ...
-1860 [main] INFO  backtype.storm.StormSubmitter - Finished submitting topology: wordcount-topology
+1860 [main] INFO  org.apache.storm.StormSubmitter - Finished submitting topology: wordcount-topology
 ```
 
 Start the ```KafkaProducer``` by executing the ```start-kafka-producer.sh```. Additionally you will have to pass the ***topic***, ***number of produced messages*** and the ***time in milliseconds between two produced messages*** as arguments, e.g. ```./start-kafka-producer.sh <topic> <count> <sleepTimeInMillis>```.
@@ -113,8 +113,8 @@ You can kill the Storm topology by executing ```kill-storm-topology.sh``` and pa
 ```shell
 ➜  docker-kafka-storm git:(master) ./kill-storm-topology.sh wordcount-topology
 ...
-1347 [main] INFO  backtype.storm.thrift - Connecting to Nimbus at 172.17.0.3:6627
-1499 [main] INFO  backtype.storm.command.kill-topology - Killed topology: wordcount-topology
+1347 [main] INFO  org.apache.storm.thrift - Connecting to Nimbus at 172.17.0.3:6627
+1499 [main] INFO  org.apache.storm.command.kill-topology - Killed topology: wordcount-topology
 ```
 
 To stop the running multi-container application stack execute ```compose.sh``` again, but this time with ```stop``` as the option.

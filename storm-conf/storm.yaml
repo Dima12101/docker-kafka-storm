@@ -1,0 +1,6 @@
+storm.zookeeper.servers: [zookeeper]
+nimbus.seeds: [nimbus]
+storm.log.dir: "/logs"
+storm.local.dir: "/data"
+worker.childopts: "-Xmx1574m -Xlog:gc:artifacts/gc.log -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=artifacts/heapdump"
+worker.profiler.childopts: "-XX:+FlightRecorder"
