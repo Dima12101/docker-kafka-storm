@@ -6,10 +6,23 @@ networks:
     driver: bridge
 
 services:
+  kafdrop:
+    image: obsidiandynamics/kafdrop:3.31.0
+    container_name: kafdrop
+    ports:
+      - 9000:9000
+    environment:
+      - KAFKA_BROKERCONNECT=kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - local
   zookeeper:
     image: zookeeper:3.8.1
     container_name: zookeeper
     restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
     ports:
       - 2181:2181
     networks:
@@ -19,8 +32,12 @@ services:
     container_name: kafka
     restart: always
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 192.168.99.100
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
     ports:
       - 9092:9092
     depends_on:
